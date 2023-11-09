@@ -1,66 +1,93 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { collection, getDocs, query, where, orderBy, limit, startAfter } from 'firebase/firestore'; 
-import { db } from '../firebase.config';
-import { toast } from 'react-toastify'; 
-import Spinner from '../components/Spinner';
-import ListingItem from '../components/ListingItem';
-
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import {
+  doc,
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  limit,
+  startAfter,
+} from "firebase/firestore";
+import { db } from "../firebase.config";
+import { toast } from "react-toastify";
+import Spinner from "../components/Spinner";
+import ListingItem from "../components/ListingItem";
 
 function Category() {
-    const [listings, setListings] = useState(null);
-    const [loading, setLoading] = useState(true);
+  const [listings, setListings] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    const params = useParams();
+  const params = useParams();
 
-    useEffect (()=> {
-        const fetchListings = async () => {
-            try {
-                // Get reference
-                const listingsRef = collection(db, 'listings');
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        // Get reference
+        const listingsRef = collection(db, "listings");
 
-                // Create a query
-                const q = query(listingsRef, where('type', '==', params.categoryName), orderBy('timestamp','desc'), limit(10 ))
-                
-                // Execute query
-                const querySnap = await getDocs(q)
+        // Create a query
+        const q = query(
+          listingsRef,
+          where("type", "==", params.categoryName),
+          orderBy("timestamp", "desc"),
+          limit(10)
+        );
 
-                const listings = [];
-                
-                querySnap.forEach(() => {
-                    return listings.push({
-                        id: doc.id,
-                        data: doc.data()
-                    })
-                })
+        // Execute query
+        const querySnap = await getDocs(q);
 
-                setListings(listings)
-                setLoading(false)
-            } catch (error) {
-                toast.error('Could not fetch listings')
-            }
-        }
+        const listings = [];
 
-        fetchListings();
-    }, [params.categoryName])
+        querySnap.forEach(() => {
+          return listings.push({
+            id: doc.id,
+            data: doc.data(),
+          });
+        });
 
-    return <div className="category">
-        <header>
-            <p className="pageHeader">
-                {params.categoryName === 'rent' ? 'Places for rent' : 'Places for sale'}
-            </p>
-        </header>
+        setListings(listings);
+        setLoading(false);
+      } catch (error) {
+        toast.error("Could not fetch listings");
+      }
+    };
 
-        {loading ? <Spinner /> : listings && listings.length > 0 ? <>
-        <main>
+    fetchListings();
+  }, [params.categoryName]);
+
+  return (
+    <div className="category">
+      <header>
+        <p className="pageHeader">
+          {params.categoryName === "rent"
+            ? "Places for rent"
+            : "Places for sale"}
+        </p>
+      </header>
+
+      {loading ? (
+        <Spinner />
+      ) : listings && listings.length > 0 ? (
+        <>
+          <main>
             <ul className="categoryListings">
-                {listings.map((listing) => (
-                    <ListingItem listing={listing.data} id={listing.id} key={listing.id}/>
-                ))}
+              {listings.map((listing) => (
+                <ListingItem
+                  listing={listing.data}
+                  id={listing.id}
+                  key={listing.id}
+                />
+              ))}
             </ul>
-        </main>
-        </> : <p>No listings for {params.categoryName}</p>}
+          </main>
+        </>
+      ) : (
+        <p>No listings for {params.categoryName}</p>
+      )}
     </div>
+  );
 }
 
 export default Category;
