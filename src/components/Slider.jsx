@@ -14,47 +14,64 @@ function Slider() {
 
   const navigate = useNavigate();
 
-  useEffect(()=> {
-    const listingsRef = collection(db, 'listings')
-    const q = query(listingsRef, orderBy('timestamp','desc',limit(5)))
-    const querySnap = await getDocs(q)
+  useEffect(() => {
+    const fetchListings = async () => {
+      const listingsRef = collection(db, "listings");
+      const q = query(listingsRef, orderBy("timestamp", "desc"), limit(5));
+      const querySnap = await getDocs(q);
 
-    let listings = []
+      let listings = [];
 
-    querySnap.forEach((doc) => {
+      querySnap.forEach((doc) => {
         return listings.push({
-            id: doc.id,
-            data: doc.data()
-        })
-    })
+          id: doc.id,
+          data: doc.data(),
+        });
+      });
+
+      setListings(listings);
+      setLoading(false);
+    };
+
     setListings(listings);
-    setLoading(loading)
-  }, [])
+    setLoading(loading);
+  }, []);
 
   if (loading) {
-    return <Spinner />
+    return <Spinner />;
   }
 
-  return listings && (
-    <>  
-    <div className="exploreHeading">Recommended</div>
+  return (
+    listings && (
+      <>
+        <div className="exploreHeading">Recommended</div>
 
-    <Swiper slidesPerView={1} pagination={{clickable: true}}>
-        {listings.map(({data, id}) =>(
-            <SwiperSlide key={id} onClick={(navigate(`/category/${data.type}/${id}`))}>
-                <div style={{background: `url(${data.imgUrls[0]}) center no-repeat`,
-                backgroundSize: 'cover'}}>
-                    <p className="swiperSlideText">{data.name}
-                    <p className="swiperSlidePrice">${data.discountedPrice ?? data.regularPrice}
-                    {data.type === 'rent' && ' /month'}
-                    </p>
-                    </p>
-                </div>
+        <Swiper slidesPerView={1} pagination={{ clickable: true }}>
+          {listings.map(({ data, id }) => (
+            <SwiperSlide
+              key={id}
+              onClick={navigate(`/category/${data.type}/${id}`)}
+            >
+              <div
+                style={{
+                  background: `url(${data.imgUrls[0]}) center no-repeat`,
+                  backgroundSize: "cover",
+                }}
+              >
+                <p className="swiperSlideText">
+                  {data.name}
+                  <p className="swiperSlidePrice">
+                    ${data.discountedPrice ?? data.regularPrice}
+                    {data.type === "rent" && " /month"}
+                  </p>
+                </p>
+              </div>
             </SwiperSlide>
-        ))}
-    </Swiper>
-    </>
-  )
+          ))}
+        </Swiper>
+      </>
+    )
+  );
 }
 
 export default Slider;
