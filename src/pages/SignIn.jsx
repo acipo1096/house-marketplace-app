@@ -60,7 +60,7 @@ function SignIn() {
             value={email}
             onChange={onChange}
           />
-          <div className="passwordInput">
+          <div>
             <input
               type={showPassword ? "text" : "password"}
               className="passwordInput"
