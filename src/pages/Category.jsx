@@ -31,7 +31,7 @@ function Category() {
         // Create a query
         const q = query(
           listingsRef,
-          where('type','==',params.categoryName),
+          where("type", "==", params.categoryName),
           orderBy("timestamp", "desc"),
           limit(10)
         );
@@ -39,12 +39,12 @@ function Category() {
         // Execute query
         const querySnap = await getDocs(q);
 
-        const lastVisible = querySnap.docs[querySnap.docs.length - 1] // gets the last doc
+        const lastVisible = querySnap.docs[querySnap.docs.length - 1]; // gets the last doc
         setLastFetchedListing(lastVisible);
 
         const listings = [];
 
-        querySnap.forEach(() => {
+        querySnap.forEach((doc) => {
           return listings.push({
             id: doc.id,
             data: doc.data(),
@@ -59,7 +59,7 @@ function Category() {
     };
 
     fetchListings();
-  }, []);
+  }, [params.categoryName]);
 
   // Pagination / Load More
   const onFetchMoreListings = async () => {
@@ -70,7 +70,7 @@ function Category() {
       // Create a query
       const q = query(
         listingsRef,
-        where('type', '==', params.categoryName),
+        where("type", "==", params.categoryName),
         orderBy("timestamp", "desc"),
         startAfter(lastFetchedListing),
         limit(10)
@@ -79,12 +79,12 @@ function Category() {
       // Execute query
       const querySnap = await getDocs(q);
 
-      const lastVisible = querySnap.docs[querySnap.docs.length - 1] // gets the last doc
+      const lastVisible = querySnap.docs[querySnap.docs.length - 1]; // gets the last doc
       setLastFetchedListing(lastVisible);
 
       const listings = [];
 
-      querySnap.forEach(() => {
+      querySnap.forEach((doc) => {
         return listings.push({
           id: doc.id,
           data: doc.data(),
@@ -124,11 +124,13 @@ function Category() {
             </ul>
           </main>
 
-            <br />
-            <br />
-            {lastFetchedListing && (
-              <p className="loadMore" onClick={onFetchMoreListings}></p>
-            )}
+          <br />
+          <br />
+          {lastFetchedListing && (
+            <p className="loadMore" onClick={onFetchMoreListings}>
+              Load More
+            </p>
+          )}
         </>
       ) : (
         <p>No listings for {params.categoryName}</p>

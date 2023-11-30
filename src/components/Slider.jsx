@@ -33,8 +33,7 @@ function Slider() {
       setLoading(false);
     };
 
-    setListings(listings);
-    setLoading(loading);
+    fetchListings();
   }, []);
 
   if (loading) {
@@ -42,8 +41,8 @@ function Slider() {
   }
 
   // Prevents big space if no slider
-  if(listings.length === 0) {
-    return <></>
+  if (listings.length === 0) {
+    return <></>;
   }
 
   return (
@@ -63,12 +62,10 @@ function Slider() {
                   backgroundSize: "cover",
                 }}
               >
-                <p className="swiperSlideText">
-                  {data.name}
-                  <p className="swiperSlidePrice">
-                    ${data.discountedPrice ?? data.regularPrice}
-                    {data.type === "rent" && " /month"}
-                  </p>
+                <p className="swiperSlideText">{data.name}</p>
+                <p className="swiperSlidePrice">
+                  ${data.discountedPrice ?? data.regularPrice}{" "}
+                  {data.type === "rent" && " / month"}
                 </p>
               </div>
             </SwiperSlide>
