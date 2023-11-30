@@ -36,12 +36,12 @@ function Offers() {
         // Execute query
         const querySnap = await getDocs(q);
 
-        const lastVisible = querySnap.docs[querySnap.docs.length-1] // gets the last doc
+        const lastVisible = querySnap.docs[querySnap.docs.length - 1]; // gets the last doc
         setLastFetchedListing(lastVisible);
 
         const listings = [];
 
-        querySnap.forEach(() => {
+        querySnap.forEach((doc) => {
           return listings.push({
             id: doc.id,
             data: doc.data(),
@@ -76,7 +76,7 @@ function Offers() {
       // Execute query
       const querySnap = await getDocs(q);
 
-      const lastVisible = querySnap.docs[querySnap.docs.length - 1] // gets the last doc
+      const lastVisible = querySnap.docs[querySnap.docs.length - 1]; // gets the last doc
       setLastFetchedListing(lastVisible);
 
       const listings = [];

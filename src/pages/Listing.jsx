@@ -41,21 +41,20 @@ function Listing() {
 
   return (
     <main>
-      <Swiper slidesPerView={1} pagination={{ clickable: true }}>
+      {/* <Swiper slidesPerView={1} pagination={{ clickable: true }}>
         {listing.imgUrls.map((url, index) => (
           <SwiperSlide key={index}>
             <div
               style={{
-                background: `url(${listing.imgUrls[index]}              
-              center
-              no-repeat`,
+                background: `url(${listing.imgUrls[index]}) center no-repeat`,
                 backgroundSize: "cover",
               }}
               className="swiperSlideDiv"
             ></div>
           </SwiperSlide>
         ))}
-      </Swiper>
+      </Swiper> */}
+
       <div
         className="shareIconDiv"
         onClick={() => {
@@ -70,6 +69,7 @@ function Listing() {
       </div>
 
       {shareLinkCopied && <p className="linkCopied">Link Copied!</p>}
+
       <div className="listingDetails">
         <p className="listingName">
           {listing.name} - $
@@ -87,10 +87,10 @@ function Listing() {
         </p>
         {listing.offer && (
           <p className="discountPrice">
-            ${listing.regularPrice - listing.discoutedPrice}
-            discount
+            ${listing.regularPrice - listing.discountedPrice} discount
           </p>
         )}
+
         <ul className="listingDetailsList">
           <li>
             {listing.bedrooms > 1
@@ -119,6 +119,7 @@ function Listing() {
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png"
             />
+
             <Marker
               position={[listing.geolocation.lat, listing.geolocation.lng]}
             >
