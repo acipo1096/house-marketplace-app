@@ -41,6 +41,11 @@ function Slider() {
     return <Spinner />;
   }
 
+  // Prevents big space if no slider
+  if(listings.length === 0) {
+    return <></>
+  }
+
   return (
     listings && (
       <>

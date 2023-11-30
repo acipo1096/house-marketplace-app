@@ -6,7 +6,7 @@ import {
     uploadBytesResumable,
     getDownloadURL,
 } from "firebase/storage";
-import { doc, updateDoc, getDoc, addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { doc, updateDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -207,7 +207,9 @@ function EditListing() {
         delete formDataCopy.address;
         !formDataCopy.offer && delete formDataCopy.discountedPrice;
 
-        const docRef = await addDoc(collection(db, "listings"), formDataCopy);
+        // Update listing
+        const docRef = doc(db, 'listings', params.listingId)
+        await updateDoc(docRef, formDataCopy)
         setLoading(false);
         toast.success("Listing saved");
         navigate(`/category/${formDataCopy.type}/${docRef.id}`);
